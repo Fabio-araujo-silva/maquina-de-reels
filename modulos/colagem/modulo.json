@@ -1,0 +1,9 @@
+{
+  "id": "colagem",
+  "nome": "Colagens (gbro-collage-broll)",
+  "estagios": ["colagem"],
+  "descricao": "Inserts de colagem halftone. Motor 'codigo' (kit/colagem.js, renderizado pelo HyperFrames) ou 'gemini' (scripts do gbro: still + Gemini Omni Flash).",
+  "entradas": ["storyboard.json → colagens", "config.broll"],
+  "saidas": ["(codigo) nada a pré-renderizar", "(gemini) colagem/colagem-<fala>.mp4"],
+  "requer": { "opcional": ["GEMINI_API_KEY"] }
+}

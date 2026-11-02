@@ -1,0 +1,14 @@
+{
+  "id": "voz",
+  "nome": "Voz",
+  "estagios": ["voz"],
+  "descricao": "Gera a narração e o tempo de cada palavra. ElevenLabs (with-timestamps) é o padrão; Kokoro offline é o reserva automático quando falta a chave.",
+  "entradas": ["roteiro.json", "config.voz", "config.modelo_voz", "config.voz_ajustes"],
+  "saidas": ["voz/narracao.wav", "voz/falas.json", "voz/palavras.json", "voz/meta.json", "voz/verificacao.json"],
+  "requer": { "opcional": ["ELEVENLABS_API_KEY"] },
+  "provedores": {
+    "elevenlabs": "Tempos por caractere direto da API. Textos longos são divididos em blocos com previous_text/next_text.",
+    "kokoro": "Uma síntese por fala (pausa por pontuação) + Whisper para o tempo de cada palavra."
+  },
+  "como_trocar": "Para outro provedor (ex.: Azure, OpenAI), crie uma função viaX(ctx, falas, voz, pastaVoz) em run.mjs que escreva os mesmos 4 arquivos de saída e aceite um prefixo novo em config.voz (ex.: 'azure:...')."
+}

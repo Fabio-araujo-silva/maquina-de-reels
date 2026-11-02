@@ -1,0 +1,28 @@
+{
+  "name": "maquina-de-reels",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Máquina de reels verticais cíclicos: prompt → roteiro com fontes → voz → motion 3D (HyperFrames) → render. Roda com Claude Code ou por API (Anthropic ou compatível com OpenAI).",
+  "type": "module",
+  "scripts": {
+    "setup": "node motor/instalar.mjs",
+    "painel": "node painel/servidor.mjs",
+    "doctor": "node motor/rs.mjs doctor",
+    "rs": "node motor/rs.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
+    "@phosphor-icons/core": "2.1.1",
+    "gsap": "3.15.0",
+    "hyperframes": "0.8.223",
+    "three": "0.186.1"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Fabio-araujo-silva/maquina-de-reels.git"
+  }
+}

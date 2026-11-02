@@ -1,0 +1,154 @@
+{
+  "versao": 1,
+  "obs": "Ordem dos estágios de cada vídeo. Para desligar um estágio opcional, mude \"ativo\" para false. Para trocar quem executa um estágio, aponte \"modulo\" para outra pasta em modulos/. executor: motor = o rs.mjs roda sozinho; claude = o Claude faz o trabalho lendo o doc; usuario = espera você; motor+claude = o motor prepara e o Claude completa; motor+usuario = o motor prepara e espera você (ex.: Sua revisão).",
+  "estagios": [
+    {
+      "id": "briefing",
+      "nome": "Briefing",
+      "executor": "motor",
+      "ativo": true,
+      "descricao": "Prompt recebido e pasta do vídeo criada."
+    },
+    {
+      "id": "menu",
+      "nome": "Menu de montagem",
+      "executor": "usuario",
+      "ativo": true,
+      "descricao": "Escolhas de narrativa, visual, áudio e marca.",
+      "doc": "SKILL.md#2-menu-de-montagem"
+    },
+    {
+      "id": "roteiro",
+      "nome": "Roteiro",
+      "executor": "claude",
+      "ativo": true,
+      "modulo": "roteiro",
+      "doc": "modulos/roteiro/MODULO.md",
+      "descricao": "Pesquisa, roteiro cíclico e validação automática.",
+      "duracao_tipica": "3 a 8 min"
+    },
+    {
+      "id": "revisao",
+      "nome": "Revisão do roteiro",
+      "executor": "usuario",
+      "ativo": true,
+      "descricao": "Você aprova ou pede ajustes (chat ou painel)."
+    },
+    {
+      "id": "voz",
+      "nome": "Voz",
+      "executor": "motor",
+      "ativo": true,
+      "modulo": "voz",
+      "descricao": "Narração na ElevenLabs (ou Kokoro offline) com o tempo de cada palavra.",
+      "duracao_tipica": "menos de 1 min"
+    },
+    {
+      "id": "trilha",
+      "nome": "Trilha e efeitos",
+      "executor": "motor",
+      "ativo": true,
+      "modulo": "trilha",
+      "descricao": "Música em loop e efeitos sonoros nos eventos do roteiro.",
+      "duracao_tipica": "1 a 2 min"
+    },
+    {
+      "id": "mixagem",
+      "nome": "Mixagem",
+      "executor": "motor",
+      "ativo": true,
+      "modulo": "mixagem",
+      "descricao": "Voz + música com ducking + efeitos, emenda cíclica, −14 LUFS.",
+      "duracao_tipica": "menos de 1 min"
+    },
+    {
+      "id": "storyboard",
+      "nome": "Storyboard",
+      "executor": "claude",
+      "ativo": true,
+      "modulo": "montagem",
+      "doc": "modulos/montagem/STORYBOARD.md",
+      "descricao": "Plano de cada fala: câmera, objetos, colagens.",
+      "duracao_tipica": "2 a 5 min"
+    },
+    {
+      "id": "colagem",
+      "nome": "Colagens (gbro)",
+      "executor": "motor",
+      "ativo": true,
+      "opcional": true,
+      "modulo": "colagem",
+      "descricao": "B-roll de colagem halftone nos trechos marcados.",
+      "duracao_tipica": "segundos (código)"
+    },
+    {
+      "id": "montagem",
+      "nome": "Montagem",
+      "executor": "motor+claude",
+      "ativo": true,
+      "modulo": "montagem",
+      "doc": "modulos/montagem/MODULO.md",
+      "descricao": "Projeto HyperFrames: overlays e legendas automáticos, mundo 3D escrito pelo Claude.",
+      "duracao_tipica": "5 a 15 min"
+    },
+    {
+      "id": "checagem",
+      "nome": "Checagem visual",
+      "executor": "motor+claude",
+      "ativo": true,
+      "modulo": "qa",
+      "doc": "modulos/qa/MODULO.md",
+      "descricao": "Lint, check e quadros de cada fala para o Claude revisar.",
+      "duracao_tipica": "2 a 6 min"
+    },
+    {
+      "id": "render",
+      "nome": "Render",
+      "executor": "motor",
+      "ativo": true,
+      "modulo": "render",
+      "descricao": "Render final do MP4.",
+      "duracao_tipica": "3 a 8 min"
+    },
+    {
+      "id": "qa",
+      "nome": "QA do loop",
+      "executor": "motor",
+      "ativo": true,
+      "modulo": "qa",
+      "descricao": "Emenda fim→início (SSIM), áudio, duração, teste de loop.",
+      "duracao_tipica": "menos de 1 min"
+    },
+    {
+      "id": "revisao_final",
+      "nome": "Revisão do agente",
+      "executor": "motor+claude",
+      "ativo": true,
+      "opcional": true,
+      "modulo": "revisor",
+      "doc": "modulos/revisor/MODULO.md",
+      "descricao": "Um agente revisor independente assiste ao vídeo pronto, aponta problemas e o Claude corrige (ou você decide, no modo relatório).",
+      "duracao_tipica": "15 a 25 min por rodada"
+    },
+    {
+      "id": "revisao_usuario",
+      "nome": "Sua revisão",
+      "executor": "motor+usuario",
+      "ativo": true,
+      "opcional": true,
+      "modulo": "revisao-usuario",
+      "doc": "modulos/revisao-usuario/MODULO.md",
+      "descricao": "Você assiste ao vídeo pronto cena a cena no painel e aprova ou pede ajustes por cena; o Claude aplica, re-renderiza e a revisão volta para você.",
+      "duracao_tipica": "o seu tempo"
+    },
+    {
+      "id": "entrega",
+      "nome": "Entrega",
+      "executor": "motor",
+      "ativo": true,
+      "modulo": "render",
+      "descricao": "Arquivo final, miniatura e tokens contabilizados.",
+      "duracao_tipica": "segundos"
+    }
+  ]
+}

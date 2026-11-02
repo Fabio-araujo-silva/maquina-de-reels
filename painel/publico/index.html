@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Estúdio de Reels</title>
+<link rel="stylesheet" href="/estilo.css" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='14' y='4' width='36' height='56' rx='8' fill='%23ff8a1f'/%3E%3Cpath d='M28 22l14 10-14 10z' fill='%23111'/%3E%3C/svg%3E" />
+</head>
+<body>
+<header class="topo">
+  <a class="marca" href="#/"><span class="marca-logo"></span><span>Estúdio de Reels</span></a>
+  <nav class="abas">
+    <a href="#/" data-rota="videos">Vídeos</a>
+    <a href="#/novo" data-rota="novo">Novo vídeo</a>
+    <a href="#/uso" data-rota="uso">Uso e custos</a>
+    <a href="#/fila" data-rota="fila">Fila</a>
+    <a href="#/config" data-rota="config">Configurações</a>
+  </nav>
+  <div id="operador" class="operador" title="Um Claude rodando 'rs fila --aguardar' ou 'rs aguardar' escuta os pedidos deste painel."></div>
+</header>
+<div id="agora" class="agora"></div>
+<main id="app"><div class="carregando">Carregando…</div></main>
+<div id="aviso" class="aviso" hidden></div>
+<script src="/app.js" type="module"></script>
+</body>
+</html>

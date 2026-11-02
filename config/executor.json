@@ -1,0 +1,6 @@
+{
+  "modo": "claude-code",
+  "anthropic": { "modelo": "claude-opus-5-5", "esforco": "high", "busca_web": true },
+  "openai": { "base_url": "https://api.openai.com/v1", "modelo": "gpt-5", "busca_web": false, "visao": true },
+  "max_passos": 80
+}

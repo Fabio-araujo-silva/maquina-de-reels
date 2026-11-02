@@ -1,0 +1,42 @@
+{
+  "titulo": "Por que o céu é azul",
+  "tema": "CÉU AZUL",
+  "promessa": "Mostrar com uma imagem só por que o ar espalha o azul, por que o pôr do sol é laranja e por que em Marte é o contrário",
+  "publico": "curiosos de ciência, 16–35",
+  "arquetipo": "mito-mecanismo",
+  "loop": {
+    "tipo": "ponte-total",
+    "frase_final": "Então, da próxima vez que alguém disser que é o reflexo do oceano, lembra:",
+    "frase_inicial": "O céu não é azul por causa do mar.",
+    "como_emenda": "A ponte termina em 'lembra:' e o vídeo recomeça com o gancho, que vira exatamente o que a pessoa deve lembrar.",
+    "ancora_visual": "Plano médio da pessoa de costas na praia, olhando o céu azul com o mar ao fundo — abre e fecha o vídeo."
+  },
+  "capitulos": [
+    { "id": "c1", "rotulo": "MITO", "resumo": "o erro comum" },
+    { "id": "c2", "rotulo": "LUZ BRANCA", "resumo": "o Sol manda todas as cores" },
+    { "id": "c3", "rotulo": "NO AR", "resumo": "o espalhamento" },
+    { "id": "c4", "rotulo": "PÔR DO SOL", "resumo": "o caminho mais longo" },
+    { "id": "c5", "rotulo": "MARTE", "resumo": "o contrário" },
+    { "id": "c6", "rotulo": "FIM", "resumo": "cta e ponte" }
+  ],
+  "falas": [
+    { "id": "f01", "capitulo": "c1", "funcao": "gancho", "texto": "O céu não é azul por causa do mar.", "visual": "Pessoa de costas na areia olhando o céu azul; mar ao fundo; a câmera sobe devagar.", "plano": "3d", "destaques": ["mar"], "rotulos": [{ "texto": "não é o mar", "ancora": "mar", "cor": "vermelho", "gatilho": "mar" }] },
+    { "id": "f02", "capitulo": "c1", "funcao": "pergunta", "texto": "Então de onde vem esse azul?", "visual": "Câmera gira para mostrar o Sol brilhando no alto.", "plano": "3d", "destaques": ["azul"] },
+    { "id": "f03", "capitulo": "c2", "funcao": "mecanismo", "texto": "A luz do Sol parece branca, mas carrega todas as cores juntas.", "visual": "Colagem: um sol de papel e uma faixa de cores saindo dele, montados do zero.", "plano": "colagem", "destaques": ["todas"], "overlay": { "tipo": "lista", "itens": ["vermelho", "verde", "azul"] } },
+    { "id": "f04", "capitulo": "c3", "funcao": "mecanismo", "texto": "No ar, ela bate em moléculas minúsculas de nitrogênio e oxigênio.", "visual": "Mergulho no ar: raios de luz atravessando moléculas flutuantes.", "plano": "3d", "rotulos": [{ "texto": "nitrogênio", "ancora": "nitrogenio", "cor": "azul", "gatilho": "nitrog" }, { "texto": "oxigênio", "ancora": "oxigenio", "cor": "verde", "gatilho": "oxig" }] },
+    { "id": "f05", "capitulo": "c3", "funcao": "soco", "texto": "E o azul ricocheteia quase seis vezes mais que o vermelho.", "fala": "E o azul ricocheteia quase seis vezes mais que o vermelho.", "visual": "Partículas azuis quicando para todos os lados; as vermelhas seguem retas.", "plano": "3d", "destaques": ["seis"], "overlay": { "tipo": "numero", "rotulo": "AZUL × VERMELHO", "valor": "~6×", "cor": "azul", "gatilho": "seis" } },
+    { "id": "f06", "capitulo": "c3", "funcao": "escada", "texto": "Esse azul espalhado chega de todas as direções. É isso que você vê.", "visual": "Câmera recua: o céu inteiro cheio de faíscas azuis; a pessoa olhando para cima.", "plano": "3d", "rotulos": [{ "texto": "você", "ancora": "pessoa", "cor": "laranja", "gatilho": "você" }] },
+    { "id": "f07", "capitulo": "c4", "funcao": "comparacao", "texto": "No fim da tarde, a luz atravessa até 38 vezes mais ar.", "fala": "No fim da tarde, a luz atravessa até trinta e oito vezes mais ar.", "visual": "O Sol desce até o horizonte; o raio de luz fica longo e rasante.", "plano": "3d", "overlay": { "tipo": "numero", "rotulo": "AR NO HORIZONTE", "valor": "38×", "cor": "laranja", "gatilho": "trinta" } },
+    { "id": "f08", "capitulo": "c4", "funcao": "soco", "texto": "O azul se perde no caminho e sobra o laranja.", "visual": "O céu vira laranja e rosa; a pessoa em silhueta.", "plano": "3d", "destaques": ["laranja"] },
+    { "id": "f09", "capitulo": "c5", "funcao": "objecao", "texto": "Em Marte é o contrário: o céu é cor de caramelo e o pôr do sol é azul.", "visual": "Troca para Marte: chão avermelhado, céu caramelo, e um sol pequeno com halo azul.", "plano": "3d", "overlay": { "tipo": "manchete", "rotulo": "EM MARTE", "valor": "PÔR DO SOL AZUL", "cor": "azul" } },
+    { "id": "f10", "capitulo": "c6", "funcao": "cta", "texto": "Manda pra quem ainda acha que é o mar.", "visual": "Volta à Terra: praia ao entardecer clareando para o dia.", "plano": "3d", "overlay": { "tipo": "cta", "rotulo": "MANDA PRA QUEM AINDA", "valor": "ACHA QUE É O MAR", "cor": "verde" } },
+    { "id": "f11", "capitulo": "c6", "funcao": "ponte", "texto": "Então, da próxima vez que alguém disser que é o reflexo do oceano, lembra:", "visual": "A câmera volta ao plano de abertura: pessoa de costas, céu azul, mar ao fundo.", "plano": "3d" }
+  ],
+  "cta": { "tipo": "compartilhar", "texto": "Manda pra quem ainda acha que é o mar." },
+  "fontes": [
+    { "afirmacao": "o céu é azul pelo espalhamento da luz nas moléculas do ar", "fonte": "NASA Space Place, Why is the sky blue?", "url": "https://spaceplace.nasa.gov/blue-sky/" },
+    { "afirmacao": "o espalhamento cresce com 1/λ⁴: (700/450)⁴ ≈ 5,9 vezes mais para o azul", "fonte": "Britannica, Rayleigh scattering", "url": "https://www.britannica.com/science/Rayleigh-scattering" },
+    { "afirmacao": "no horizonte a luz atravessa cerca de 38 vezes mais atmosfera que no zênite", "fonte": "Air mass (astronomy), fórmula de Kasten & Young", "url": "https://en.wikipedia.org/wiki/Air_mass_(astronomy)" },
+    { "afirmacao": "em Marte o céu diurno é caramelo e o pôr do sol é azulado", "fonte": "NASA/JPL Photojournal PIA19400, Sunset in Mars' Gale Crater", "url": "https://photojournal.jpl.nasa.gov/catalog/PIA19400" }
+  ]
+}

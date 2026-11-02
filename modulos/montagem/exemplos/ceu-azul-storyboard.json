@@ -1,0 +1,175 @@
+{
+  "biblia": {
+    "lugar": "Praia ao meio-dia (areia, guarda-sol listrado, mar ao fundo); o mesmo lugar vira pôr do sol e depois Marte",
+    "objetos_heroi": [
+      "o Sol com halo, que desce até o horizonte",
+      "moléculas de N₂ e O₂ flutuando no ar",
+      "fótons azuis e vermelhos como riscos de luz",
+      "o guarda-sol listrado (âncora do loop)"
+    ],
+    "pessoas": [
+      {
+        "quem": "banhista anônimo",
+        "tracos": "cabelo curto escuro, camiseta amarela, de costas para a câmera"
+      }
+    ],
+    "texto_em_cena": [
+      "etiqueta 'não é o mar' apontando o mar",
+      "etiquetas 'nitrogênio' e 'oxigênio' nas moléculas",
+      "cartão 'AZUL × VERMELHO ~6×'"
+    ],
+    "referencias": "fotos de praia ao meio-dia e de pôr do sol; fotos do céu de Marte (NASA) para a cor caramelo"
+  },
+  "ambiente": "Praia ao meio-dia: areia clara, mar azul-esverdeado até o horizonte, céu em degradê azul, nuvens macias ao fundo. No capítulo NO AR a câmera entra numa 'nuvem' de moléculas flutuando no ar diante da pessoa. PÔR DO SOL: o céu passa a laranja/rosa e o sol desce ao horizonte. MARTE: chão avermelhado, céu caramelo, sol pequeno com halo azul. FIM: volta ao dia na Terra.",
+  "elenco": [
+    {
+      "id": "pessoa",
+      "descricao": "boneco sem rosto, camiseta amarela, bermuda azul, cabelo curto, de costas para a câmera olhando o céu",
+      "pose_padrao": "em_pe"
+    }
+  ],
+  "objetos": [
+    {
+      "id": "mar",
+      "descricao": "plano grande azul-esverdeado com leve ondulação, do meio da praia até o horizonte"
+    },
+    {
+      "id": "sol",
+      "descricao": "esfera emissiva com halo; alto no céu de dia, desce ao horizonte no pôr do sol"
+    },
+    {
+      "id": "moleculas",
+      "descricao": "pares de esferas: N2 (azul claro) e O2 (verde claro), flutuando devagar no ar"
+    },
+    {
+      "id": "fotons",
+      "descricao": "partículas de luz vindas do sol: as azuis ricocheteiam para todo lado, as vermelhas seguem retas"
+    },
+    {
+      "id": "guarda-sol",
+      "descricao": "guarda-sol listrado fincado na areia (dá escala e cor)"
+    }
+  ],
+  "ancoras": [
+    "mar",
+    "pessoa",
+    "nitrogenio",
+    "oxigenio"
+  ],
+  "planos": [
+    {
+      "fala": "f01",
+      "cenario": "praia",
+      "camera": "plano médio por trás da pessoa, céu ocupando 2/3; sobe devagar",
+      "acao": "pessoa olhando para cima; etiqueta 'não é o mar' aponta o mar"
+    },
+    {
+      "fala": "f02",
+      "cenario": "praia (céu e sol)",
+      "camera": "órbita curta para a esquerda revelando o sol alto",
+      "acao": "pessoa vira a cabeça para o sol"
+    },
+    {
+      "fala": "f03",
+      "cenario": "colagem",
+      "camera": "(colagem) sol de papel e arco-íris de cartolina",
+      "acao": "colagem cobre a tela"
+    },
+    {
+      "fala": "f04",
+      "cenario": "no ar (moléculas)",
+      "camera": "mergulho para frente entrando no ar entre as moléculas",
+      "acao": "moléculas flutuando; etiquetas nitrogênio e oxigênio"
+    },
+    {
+      "fala": "f05",
+      "cenario": "no ar (moléculas)",
+      "camera": "macro lateral nas moléculas; fótons passando",
+      "acao": "fótons azuis ricocheteiam em direções aleatórias; vermelhos seguem retos"
+    },
+    {
+      "fala": "f06",
+      "cenario": "praia (céu cheio de faíscas)",
+      "camera": "recua e sobe mostrando o céu cheio de faíscas azuis e a pessoa embaixo",
+      "acao": "faíscas azuis espalhadas pelo céu; etiqueta 'você' na pessoa"
+    },
+    {
+      "fala": "f07",
+      "cenario": "praia ao pôr do sol",
+      "camera": "plano aberto lateral da praia, sol descendo ao horizonte",
+      "acao": "sol desce; raio de luz rasante e longo"
+    },
+    {
+      "fala": "f08",
+      "cenario": "praia ao pôr do sol",
+      "camera": "contra-luz: pessoa em silhueta diante do pôr do sol laranja",
+      "acao": "céu laranja/rosa"
+    },
+    {
+      "fala": "f09",
+      "cenario": "Marte",
+      "camera": "corte para Marte: plano médio com a pessoa no chão vermelho, sol pequeno de halo azul",
+      "acao": "céu caramelo; chão avermelhado"
+    },
+    {
+      "fala": "f10",
+      "cenario": "praia",
+      "camera": "de volta à Terra, plano frontal aberto; céu clareando do laranja para o azul",
+      "acao": "pessoa acena (cta)"
+    },
+    {
+      "fala": "f11",
+      "cenario": "praia",
+      "camera": "termina exatamente no plano de abertura (por trás da pessoa, céu azul)",
+      "acao": "pessoa volta à pose de olhar o céu"
+    }
+  ],
+  "colagens": [
+    {
+      "fala": "f03",
+      "metafora": "o sol solta uma faixa com todas as cores juntas",
+      "fundo": "#f2b134",
+      "elementos": [
+        {
+          "icone": "sun",
+          "estilo": "halftone",
+          "x": 0.5,
+          "y": 0.4,
+          "escala": 0.46,
+          "entra": "cima",
+          "ordem": 1,
+          "rot": -4
+        },
+        {
+          "icone": "rainbow",
+          "estilo": "cartao",
+          "cor": "#ff6b3d",
+          "x": 0.5,
+          "y": 0.6,
+          "escala": 0.62,
+          "entra": "baixo",
+          "ordem": 2,
+          "rot": 3
+        },
+        {
+          "icone": "eye",
+          "estilo": "halftone",
+          "x": 0.74,
+          "y": 0.66,
+          "escala": 0.22,
+          "entra": "direita",
+          "ordem": 3,
+          "rot": 8
+        }
+      ],
+      "acao": {
+        "tipo": "gira",
+        "elemento": 0
+      }
+    }
+  ],
+  "loop": {
+    "plano_inicial": "f01: câmera atrás da pessoa em (0.5, 1.45, 3.4) olhando (0, 2.6, -8); céu azul de dia; pose em_pe com a cabeça para cima",
+    "plano_final": "f11 termina exatamente no plano_inicial, com céu de dia e a mesma pose"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "id": "render",
+  "nome": "Render e entrega",
+  "estagios": ["render", "entrega"],
+  "descricao": "hyperframes render (qualidade conforme o menu) com progresso no painel; entrega copia o MP4 final, gera capa e folha e contabiliza tokens.",
+  "saidas": ["out/render.mp4", "out/<id>.mp4", "out/capa.jpg", "out/folha.jpg", "entrega.json", "tokens.json"]
+}

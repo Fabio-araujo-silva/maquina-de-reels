@@ -1,0 +1,116 @@
+<template>
+<style>
+  #root { position: absolute; inset: 0; overflow: hidden; }
+  #__MUNDO__-tela { position: absolute; inset: 0; width: 100%; height: 100%; }
+</style>
+<div id="root" data-composition-id="__MUNDO__" data-width="1080" data-height="1920">
+  <canvas id="__MUNDO__-tela" width="1080" height="1920"></canvas>
+</div>
+<script type="module">
+// ESBOCO_MUNDO — modelo genérico. O Claude reescreve as seções 1–4 para o tema do vídeo
+// (seguindo storyboard.json e modulos/montagem/MODULO.md) e APAGA esta linha.
+import * as THREE from 'three';
+import { criarPalco, criarPiso, criarNuvens, sombraContato } from 'kit/palco.js';
+import { caixa, cilindro, esfera, mesa, cadeira, parede, quadroNegro, placaTexto, telaCanvas, placaCircuito, bandeira, calendario, botao, grade, revelarGrade, raioX, mat, sombrear } from 'kit/formas.js';
+import { criarPersonagem, sequenciaPoses, caminhar, POSES } from 'kit/personagem.js';
+import { planos, mov } from 'kit/camera.js';
+import { criarRotulos } from 'kit/rotulos.js';
+import { janela, fala, falaEm, capituloEm, quando, seg, ease, lerp, clamp, trilha, janelaVisivel, ligarMundo } from 'kit/nucleo.js';
+
+const R = window.REEL; const P = R.paleta; const TOTAL = R.total;
+const tela = document.getElementById('__MUNDO__-tela');
+const palco = criarPalco({ canvas: tela, paleta: P });
+const { scene } = palco;
+const rotulos = criarRotulos(tela.parentElement, palco);
+
+// ===================== 1. AMBIENTE =====================
+criarPiso(palco);
+criarNuvens(palco);
+
+// ===================== 2. ELENCO E OBJETOS =====================
+// Objeto-herói genérico: um aparelho com tela que mostra o capítulo atual.
+const mesaHeroi = mesa({ largura: 1.2, profundidade: 0.7 });
+scene.add(mesaHeroi);
+const heroi = new THREE.Group();
+const corpo = caixa(0.62, 0.34, 0.42, { raio: 0.06, cor: P.objeto || '#f4f2ee' }); corpo.position.y = 0.17; heroi.add(corpo);
+const telaHeroi = telaCanvas(0.46, 0.2, (g, w, h, t) => {
+  g.fillStyle = '#2a2d33'; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#e8ecf1'; g.font = `800 ${Math.round(h * 0.34)}px Inter, Arial`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(String(capituloEm(t)?.rotulo || '').toUpperCase(), w / 2, h / 2);
+});
+telaHeroi.position.set(0, 0.25, 0.212); telaHeroi.rotation.x = -0.12; heroi.add(telaHeroi);
+const miolo = placaCircuito({ largura: 0.5, profundidade: 0.34, chips: 3 }); miolo.position.y = 0.08; miolo.visible = false;
+miolo.traverse((o) => { o.userData.miolo = true; }); heroi.add(miolo);
+heroi.position.y = mesaHeroi.userData.tampoY; scene.add(heroi);
+sombraContato(mesaHeroi, { raio: 0.95, opacidade: 0.28 });
+
+const pessoa = criarPersonagem({ acessorio: 'gorro', semente: 2 });
+pessoa.grupo.position.set(0.95, 0, 0.15); pessoa.grupo.rotation.y = -1.25;
+scene.add(pessoa.grupo);
+sombraContato(pessoa.grupo, { raio: 0.45, opacidade: 0.3 });
+
+// Cópias em massa (para números grandes): mesa + aparelho mesclados e instanciados.
+const unidade = new THREE.Group(); const m2 = mesa({ largura: 1.2, profundidade: 0.7 }); unidade.add(m2);
+const c2 = caixa(0.62, 0.34, 0.42, { raio: 0.06, cor: P.objeto || '#f4f2ee' }); c2.position.y = 0.92; unidade.add(c2);
+const copias = grade(unidade, { nx: 11, nz: 16, dx: 1.9, dz: 2.1, origem: [0, 0, -2.6] });
+scene.add(copias);
+
+// Âncoras para as etiquetas do roteiro (campo "rotulos" das falas).
+rotulos.ancorar('heroi', heroi, [0, 0.45, 0]);
+rotulos.ancorar('pessoa', pessoa.partes.cabeca, [0, 0.25, 0]);
+rotulos.ancorar('mesa', mesaHeroi, [0, 0.8, 0]);
+rotulos.ancorar('miolo', miolo, [0, 0.05, 0]);
+for (const r of R.rotulos || []) if (!rotulos.pontoDe(r.ancora, 0)) rotulos.ancorar(r.ancora, heroi, [0, 0.45, 0]);
+rotulos.doRoteiro();
+
+// ===================== 3. PLANOS DE CÂMERA =====================
+// Gramática padrão por função da fala. Troque por planos feitos à mão para o tema.
+const ALVO = [0, 1.0, 0];
+const PLANO_ABERTURA = { pos: [0.55, 1.15, 1.55], alvo: [0, 0.98, 0], fov: 32 };
+const lista = [];
+R.falas.forEach((f, i) => {
+  const ini = f.janela_inicio ?? f.inicio; const fim = f.janela_fim;
+  const ultima = i === R.falas.length - 1;
+  let p;
+  switch (f.funcao) {
+    case 'gancho': p = { ini, fim, de: PLANO_ABERTURA, para: { pos: [0.9, 1.35, 2.7], alvo: [0.2, 1.0, 0], fov: 32 } }; break;
+    case 'pergunta': p = mov.fixo([2.6, 1.6, 2.4], [0.5, 1.15, 0], { ini, fim, fov: 30, tremor: 0.015 }); break;
+    case 'mecanismo': case 'escada': p = mov.orbita([0, 0.95, 0], { ini, fim, raio: 1.9, altura: 0.55, ang: [i % 2 ? 40 : -35, i % 2 ? -10 : 15], alvoY: 1.0 }); break;
+    case 'soco': p = mov.aproximar([0, 1.0, 0], { ini, fim, azimute: 8, elevacao: 18, dist: [1.4, 1.05], ease: 'o' }); break;
+    case 'comparacao': p = mov.revelar([0, 0.9, 0], { ini, fim, de: [0.4, 1.0, 2.6], para: [0, 9, 13] }); break;
+    case 'objecao': case 'prova': p = mov.fixo([-1.6, 1.55, 3.0], [0.4, 1.2, 0], { ini, fim, fov: 30, tremor: 0.01 }); break;
+    case 'cta': p = { ini, fim, de: { pos: [0, 1.7, 4.2], alvo: [0.3, 1.1, 0], fov: 30 }, para: { pos: [0.2, 1.5, 3.2], alvo: [0.2, 1.05, 0], fov: 30 } }; break;
+    default: p = mov.aproximar(ALVO, { ini, fim, azimute: (i * 37) % 80 - 40, elevacao: 14, dist: [3.0, 2.4] });
+  }
+  if (ultima) p = { ini, fim: TOTAL, de: { pos: [1.2, 1.5, 3.2], alvo: [0.1, 1.0, 0], fov: 32 }, para: PLANO_ABERTURA, ease: 'io' };
+  lista.push(p);
+});
+const cam = planos(lista);
+
+// ===================== 4. AÇÕES POR TEMPO =====================
+const poses = sequenciaPoses(R.falas.map((f) => ({
+  t: f.janela_inicio ?? f.inicio,
+  pose: { pergunta: 'duvida', objecao: 'bracos_cruzados', prova: 'apontando', cta: 'acenando', mecanismo: 'digitando', escada: 'digitando' }[f.funcao] || 'em_pe',
+})));
+
+function render(t) {
+  cam.aplicar(t, palco);
+  pessoa.pose(poses(t)).vida(t, 2).olhar(heroi.position, 0.5);
+  // raio-x durante mecanismos: mostra o miolo
+  const f = falaEm(t);
+  const xr = f && (f.funcao === 'mecanismo' || f.funcao === 'escada');
+  raioX(heroi, xr); miolo.visible = xr;
+  // cópias aparecem nas comparações e em números grandes
+  const comp = R.falas.find((x) => x.funcao === 'comparacao' && t >= (x.janela_inicio ?? x.inicio) && t < x.janela_fim);
+  copias.visible = Boolean(comp);
+  if (comp) revelarGrade(copias, ease.o(seg(t, comp.janela_inicio ?? comp.inicio, comp.fim)));
+  telaHeroi.userData.atualizar(t, capituloEm(t)?.id);
+  rotulos.atualizar(t);
+  palco.renderizar();
+}
+
+// Não mude esta linha: num vídeo híbrido ela mostra este mundo só nas janelas dele (REEL.mundos) e pula o resto.
+ligarMundo('__MUNDO__', tela, render);
+window.__timelines['__MUNDO__'] = gsap.timeline({ paused: true });
+</script>
+</template>

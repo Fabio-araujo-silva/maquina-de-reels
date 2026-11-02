@@ -1,0 +1,11 @@
+{
+  "id": "revisao-usuario",
+  "nome": "Sua revisão",
+  "estagios": ["revisao_usuario"],
+  "descricao": "Depois da revisão do agente, você assiste ao vídeo pronto cena a cena no painel (#/v/<id>/revisar), marca cada cena como boa ou pede uma mudança e aprova ou envia os ajustes. Aprovado: a entrega roda na hora. Ajustes: o Claude aplica, re-renderiza (sem nova rodada do agente) e uma rodada nova volta para você conferir.",
+  "entradas": ["out/render.mp4", "linha.json", "roteiro.json"],
+  "saidas": ["revisao-usuario/rodada-N.json", "revisao-usuario/rodada-N/quadros/<fala>_<k>.jpg", "revisao-usuario/rascunho-N.json (painel)"],
+  "config": { "revisao_usuario": "sim (padrão) | nao" },
+  "docs": ["MODULO.md"],
+  "regra": "O vídeo só é entregue com a aprovação do usuário. O Claude corrige só o que ele marcou; texto da narração muda quando o pedido é dele."
+}

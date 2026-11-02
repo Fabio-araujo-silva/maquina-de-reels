@@ -1,0 +1,241 @@
+<template>
+<style>
+  #root { position: absolute; inset: 0; overflow: hidden; }
+  #mundo-tela { position: absolute; inset: 0; width: 100%; height: 100%; }
+</style>
+<div id="root" data-composition-id="mundo" data-width="1080" data-height="1920">
+  <canvas id="mundo-tela" width="1080" height="1920"></canvas>
+</div>
+<script type="module">
+// Mundo do vídeo "Por que o céu é azul": praia → moléculas no ar → pôr do sol → Marte → volta ao início.
+import * as THREE from 'three';
+import { criarPalco, criarNuvens, sombraContato, texturaTerrazzo, criarBrilho } from 'kit/palco.js';
+import { caixa, cilindro, esfera, mat, sombrear } from 'kit/formas.js';
+import { criarPersonagem, sequenciaPoses, misturarPoses, POSES } from 'kit/personagem.js';
+import { planos } from 'kit/camera.js';
+import { criarRotulos } from 'kit/rotulos.js';
+import { fala, seg, ease, lerp, clamp, mulberry32 } from 'kit/nucleo.js';
+
+const R = window.REEL; const P = R.paleta; const TOTAL = R.total;
+const J = (id) => { const f = fala(id); return { ini: f.janela_inicio ?? f.inicio, fim: f.janela_fim, fi: f.inicio, ff: f.fim }; };
+const tela = document.getElementById('mundo-tela');
+const palco = criarPalco({ canvas: tela, paleta: P, ceu: false });
+const { scene, sol, hemi } = palco;
+const rotulos = criarRotulos(tela.parentElement, palco);
+
+// ===================== 1. AMBIENTE =====================
+const CEUS = {
+  dia: ['#6fa8dc', '#a9cdec', '#e3eff8'],
+  tarde: ['#5b4b8a', '#e9774a', '#f6b06a', '#fde0bd'],
+  marte: ['#a8784f', '#d2a47a', '#ead1ad'],
+};
+const ceuCanvas = document.createElement('canvas'); ceuCanvas.width = 4; ceuCanvas.height = 512;
+const ceuTex = new THREE.CanvasTexture(ceuCanvas); ceuTex.colorSpace = THREE.SRGBColorSpace;
+scene.background = ceuTex;
+let ceuChave = '';
+const misturarCor = (a, b, x) => '#' + new THREE.Color(a).lerp(new THREE.Color(b), x).getHexString();
+function desenharCeu(cores) {
+  const chave = cores.join(); if (chave === ceuChave) return; ceuChave = chave;
+  const g = ceuCanvas.getContext('2d'); const gr = g.createLinearGradient(0, 0, 0, 512);
+  cores.forEach((c, i) => gr.addColorStop(i / (cores.length - 1), c)); g.fillStyle = gr; g.fillRect(0, 0, 4, 512); ceuTex.needsUpdate = true;
+}
+function misturarCeu(a, b, x) {
+  const n = Math.max(a.length, b.length);
+  const pega = (arr, i) => arr[Math.min(arr.length - 1, Math.round((i * (arr.length - 1)) / (n - 1)))];
+  return Array.from({ length: n }, (_, i) => misturarCor(pega(a, i), pega(b, i), x));
+}
+
+// areia (terrazzo com cores de areia) e Marte (mesma geometria, outra textura)
+const texAreia = texturaTerrazzo(['#d9c28f', '#c8ad76', '#f2e4c2', '#b7995f'], { base: '#ead9b2', pontos: 5200 }); texAreia.repeat.set(30, 30);
+const texMarte = texturaTerrazzo(['#9c4a2c', '#7a3420', '#c46a42', '#5e2a1a'], { base: '#b8603a', pontos: 5200, semente: 8 }); texMarte.repeat.set(30, 30);
+const matChao = new THREE.MeshStandardMaterial({ map: texAreia, roughness: 0.95 });
+const chao = new THREE.Mesh(new THREE.PlaneGeometry(160, 160), matChao); chao.rotation.x = -Math.PI / 2; chao.receiveShadow = true; scene.add(chao);
+
+// mar com ondas leves (vértices como função de t)
+const geoMar = new THREE.PlaneGeometry(220, 120, 110, 60); geoMar.rotateX(-Math.PI / 2); geoMar.translate(0, 0.03, -66);
+const posMar = geoMar.attributes.position; const marOrig = posMar.array.slice();
+const mar = new THREE.Mesh(geoMar, new THREE.MeshStandardMaterial({ color: '#2b8fb0', roughness: 0.22, metalness: 0.15 })); mar.receiveShadow = true; scene.add(mar);
+const espuma = new THREE.Mesh(new THREE.PlaneGeometry(220, 0.6), new THREE.MeshStandardMaterial({ color: '#f4fbff', roughness: 0.6, transparent: true, opacity: 0.85 }));
+espuma.rotation.x = -Math.PI / 2; espuma.position.set(0, 0.035, -6.05); scene.add(espuma);
+function ondas(t) {
+  for (let i = 0; i < posMar.count; i++) {
+    const x = marOrig[i * 3], z = marOrig[i * 3 + 2];
+    posMar.array[i * 3 + 1] = 0.03 + Math.sin(x * 0.35 + t * 1.3) * 0.05 + Math.sin(z * 0.5 - t * 1.7) * 0.06;
+  }
+  posMar.needsUpdate = true; geoMar.computeVertexNormals();
+  espuma.position.z = -6.05 + Math.sin(t * 1.1) * 0.12;
+}
+const nuvens = criarNuvens(palco, { n: 8, raio: 70, altura: 16 });
+
+// rochas de Marte
+const rochas = new THREE.Group(); const rndR = mulberry32(21);
+for (let i = 0; i < 26; i++) {
+  const r = new THREE.Mesh(new THREE.DodecahedronGeometry(0.15 + rndR() ** 2 * 0.9, 0), mat.fosco(rndR() < 0.5 ? '#8a3f24' : '#a2512f'));
+  r.position.set((rndR() - 0.5) * 30, 0.05, -2 - rndR() * 40); r.rotation.set(rndR() * 3, rndR() * 3, rndR() * 3); r.scale.y = 0.6; sombrear(r); rochas.add(r);
+}
+scene.add(rochas);
+
+// ===================== 2. ELENCO E OBJETOS =====================
+const pessoa = criarPersonagem({ roupa: '#f2c230', calca: '#2a3a5e', cabelo: 'curto', corCabelo: '#2b1d12', semente: 1 });
+pessoa.grupo.rotation.y = Math.PI; // de frente para o mar (-Z)
+scene.add(pessoa.grupo);
+sombraContato(pessoa.grupo, { raio: 0.45, opacidade: 0.32 });
+
+// guarda-sol listrado e toalha
+const guardaSol = new THREE.Group();
+const haste = cilindro(0.025, 2.2, { material: mat.plastico('#f4f2ee') }); haste.position.y = 1.1; guardaSol.add(haste);
+const cl = document.createElement('canvas'); cl.width = 256; cl.height = 16; const gl2 = cl.getContext('2d');
+for (let i = 0; i < 8; i++) { gl2.fillStyle = i % 2 ? '#ffffff' : '#ef5a4a'; gl2.fillRect(i * 32, 0, 32, 16); }
+const texL = new THREE.CanvasTexture(cl); texL.colorSpace = THREE.SRGBColorSpace;
+const copa = new THREE.Mesh(new THREE.ConeGeometry(1.15, 0.45, 8, 1, true), new THREE.MeshStandardMaterial({ map: texL, side: THREE.DoubleSide, roughness: 0.7 }));
+copa.position.y = 2.2; copa.castShadow = true; guardaSol.add(copa);
+guardaSol.position.set(3.1, 0, -3.2); guardaSol.rotation.z = 0.08; scene.add(guardaSol);
+const toalha = caixa(0.8, 0.01, 1.6, { raio: 0.004, cor: '#2bb0a6' }); toalha.position.set(2.5, 0.006, -2.4); toalha.rotation.y = 0.3; scene.add(toalha);
+
+// sol + halo
+const solMesh = new THREE.Mesh(new THREE.SphereGeometry(2.6, 32, 16), new THREE.MeshBasicMaterial({ color: '#fff3c4', fog: false }));
+scene.add(solMesh);
+const halo = criarBrilho({ cor: '#fff2c0', tamanho: 26 }); scene.add(halo);
+
+// moléculas (N2 azul, O2 verde) numa nuvem diante da pessoa
+const nuvemMol = new THREE.Group(); nuvemMol.position.set(0, 2.3, -2.2); scene.add(nuvemMol);
+const moleculas = []; const rndM = mulberry32(5);
+const matN = mat.plastico('#8fc7ff'); const matO = mat.plastico('#9be3b0');
+for (let i = 0; i < 46; i++) {
+  const ehN = i % 5 !== 0; // ~80% nitrogênio, ~20% oxigênio (como no ar)
+  const m = new THREE.Group();
+  const a = esfera(0.075, { material: ehN ? matN : matO, segs: 20 }); a.position.x = -0.06;
+  const b = esfera(0.075, { material: ehN ? matN : matO, segs: 20 }); b.position.x = 0.06;
+  m.add(a, b);
+  const base = new THREE.Vector3((rndM() - 0.5) * 3.2, (rndM() - 0.5) * 2.2, (rndM() - 0.5) * 2.6);
+  m.userData = { base, fase: rndM() * 10, gira: new THREE.Vector3(rndM(), rndM(), rndM()).normalize(), ehN };
+  nuvemMol.add(m); moleculas.push(m);
+}
+// as duas moléculas que recebem etiqueta ficam em lugares bem visíveis (índice 1 = N2, índice 0 = O2)
+moleculas[1].userData.base.set(-0.42, 0.18, 0.9); moleculas[0].userData.base.set(0.45, -0.12, 0.7);
+const molN = moleculas[1]; const molO = moleculas[0];
+
+// fótons: azuis ricocheteiam nas moléculas, vermelhos seguem retos
+const fotons = []; const rndF = mulberry32(13);
+const dirSol = new THREE.Vector3(1, -0.55, 0.35).normalize();
+for (let i = 0; i < 56; i++) {
+  const azul = i % 2 === 0;
+  const geo = new THREE.CapsuleGeometry(0.028, 0.22, 4, 10); geo.rotateZ(Math.PI / 2); // risco de luz deitado no eixo X
+  const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: azul ? '#4fb0ff' : '#ff4a3a', fog: false, toneMapped: false }));
+  const origem = new THREE.Vector3(-2.6 + (rndF() - 0.5) * 0.8, -1.0 + rndF() * 2.0, -1.0 + (rndF() - 0.5) * 2.2);
+  const quique = new THREE.Vector3(rndF() - 0.5, rndF() - 0.2, rndF() - 0.5).normalize();
+  m.userData = { azul, origem, quique, atraso: rndF() * 1.6, tq: 0.9 + rndF() * 0.8 };
+  nuvemMol.add(m); fotons.push(m);
+}
+// faíscas azuis no céu (luz espalhada vindo de todas as direções)
+const nFa = 1400; const geoFa = new THREE.BufferGeometry(); const posFa = new Float32Array(nFa * 3); const rndS = mulberry32(31);
+for (let i = 0; i < nFa; i++) { posFa[i * 3] = (rndS() - 0.5) * 40; posFa[i * 3 + 1] = 2 + rndS() * 16; posFa[i * 3 + 2] = -2 - rndS() * 30; }
+geoFa.setAttribute('position', new THREE.BufferAttribute(posFa, 3));
+const faiscas = new THREE.Points(geoFa, new THREE.PointsMaterial({ color: '#8fd0ff', size: 0.14, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, fog: false }));
+scene.add(faiscas);
+
+// âncoras das etiquetas
+rotulos.ancorar('mar', new THREE.Vector3(2.6, 0.08, -13));
+rotulos.ancorar('pessoa', pessoa.partes.cabeca, [0, 0.28, 0]);
+rotulos.ancorar('nitrogenio', molN);
+rotulos.ancorar('oxigenio', molO);
+rotulos.doRoteiro();
+
+// ===================== 3. PLANOS DE CÂMERA =====================
+const PI0 = { pos: [0.5, 1.45, 3.4], alvo: [0, 2.6, -8], fov: 34 };
+const lista = [
+  { ini: 0, fim: J('f01').fim, de: PI0, para: { pos: [0.5, 1.72, 3.25], alvo: [0, 2.95, -8], fov: 34 }, ease: 'io2' },
+  { ini: J('f02').ini, fim: J('f02').fim, de: { pos: [1.6, 1.4, 2.9], alvo: [-1.8, 3.2, -9], fov: 36 }, para: { pos: [2.4, 1.3, 2.4], alvo: [-3.2, 4.6, -10], fov: 36 } },
+  { ini: J('f03').ini, fim: J('f03').fim, de: { pos: [2.4, 1.3, 2.4], alvo: [-3.2, 4.6, -10], fov: 36 } },
+  { ini: J('f04').ini, fim: J('f04').fim, de: { pos: [0.5, 1.95, 2.4], alvo: [0, 2.3, -2.2], fov: 34 }, para: { pos: [0.1, 2.28, 0.15], alvo: [0, 2.3, -2.2], fov: 34 }, ease: 'io' },
+  { ini: J('f05').ini, fim: J('f05').fim, de: { pos: [1.15, 2.4, -1.0], alvo: [-0.3, 2.3, -2.4], fov: 34 }, para: { pos: [0.95, 2.45, -0.75], alvo: [-0.4, 2.3, -2.4], fov: 34 } },
+  { ini: J('f06').ini, fim: J('f06').fim, de: { pos: [0.3, 2.1, 0.8], alvo: [0, 2.4, -2.2], fov: 34 }, para: { pos: [2.6, 2.9, 6.8], alvo: [0, 2.6, -4], fov: 36 }, ease: 'io' },
+  { ini: J('f07').ini, fim: J('f07').fim, de: { pos: [6.2, 1.5, 2.0], alvo: [-3, 2.2, -12], fov: 36 }, para: { pos: [5.6, 1.4, 1.4], alvo: [-4, 1.8, -12], fov: 36 } },
+  { ini: J('f08').ini, fim: J('f08').fim, de: { pos: [0.35, 0.95, 2.7], alvo: [-1.6, 2.0, -10], fov: 36 }, para: { pos: [0.3, 1.05, 2.4], alvo: [-1.7, 2.0, -10], fov: 36 } },
+  { ini: J('f09').ini, fim: J('f09').fim, de: { pos: [2.2, 1.45, 2.7], alvo: [-0.8, 2.1, -8], fov: 36 }, para: { pos: [1.7, 1.4, 2.2], alvo: [-0.8, 2.1, -8], fov: 36 } },
+  { ini: J('f10').ini, fim: J('f10').fim, de: { pos: [0.2, 1.5, -3.6], alvo: [0, 1.25, 0], fov: 32 }, para: { pos: [0.1, 1.45, -3.0], alvo: [0, 1.25, 0], fov: 32 } },
+  { ini: J('f11').ini, fim: TOTAL, de: { pos: [1.5, 1.65, 4.4], alvo: [0, 2.4, -8], fov: 34 }, para: PI0, ease: 'io' },
+];
+const cam = planos(lista);
+
+// ===================== 4. AÇÕES POR TEMPO =====================
+const OLHAR_CEU = misturarPoses(POSES.em_pe, { cabeca: { inclina: -26 } }, 1);
+const poses = sequenciaPoses([
+  { t: 0, pose: OLHAR_CEU }, { t: J('f07').ini, pose: 'em_pe' }, { t: J('f09').ini, pose: 'pensando' },
+  { t: J('f10').ini, pose: 'acenando' }, { t: J('f11').ini, pose: OLHAR_CEU },
+], 0.5);
+
+// estado do céu/sol/chão ao longo do vídeo
+const SOL_DIA = new THREE.Vector3(-14, 21, -70); const SOL_TARDE = new THREE.Vector3(-13, 1.6, -70);
+function estado(t) {
+  const f07 = J('f07'), f09 = J('f09'), f10 = J('f10');
+  let ceu = CEUS.dia, solP = SOL_DIA.clone(), solCor = '#fff3c4', haloCor = '#fff2c0', marte = false, luz = 1;
+  if (t >= f07.ini && t < f09.ini) {
+    const x = ease.io(seg(t, f07.ini, f07.fim + 0.6));
+    ceu = misturarCeu(CEUS.dia, CEUS.tarde, x); solP = SOL_DIA.clone().lerp(SOL_TARDE, x);
+    solCor = misturarCor('#fff3c4', '#ff9a4a', x); haloCor = misturarCor('#fff2c0', '#ff8a3a', x); luz = lerp(1, 0.55, x);
+  } else if (t >= f09.ini && t < f10.ini) {
+    ceu = CEUS.marte; solP = new THREE.Vector3(-10, 6, -70); solCor = '#f4f8ff'; haloCor = '#5fa8ff'; marte = true; luz = 0.8;
+  } else if (t >= f10.ini && t < J('f11').ini) {
+    const x = ease.io(seg(t, f10.ini, f10.fim));
+    ceu = misturarCeu(CEUS.tarde, CEUS.dia, x); solP = SOL_TARDE.clone().lerp(SOL_DIA, x);
+    solCor = misturarCor('#ff9a4a', '#fff3c4', x); haloCor = misturarCor('#ff8a3a', '#fff2c0', x); luz = lerp(0.55, 1, x);
+  }
+  return { ceu, solP, solCor, haloCor, marte, luz };
+}
+
+function render(t) {
+  const e = estado(t);
+  desenharCeu(e.ceu);
+  scene.fog.color.set(e.ceu[e.ceu.length - 1]); scene.fog.near = 25; scene.fog.far = 95;
+  solMesh.position.copy(e.solP); solMesh.material.color.set(e.solCor);
+  halo.position.copy(e.solP); halo.material.color.set(e.haloCor); halo.scale.setScalar(e.marte ? 34 : 26);
+  solMesh.scale.setScalar(e.marte ? 0.55 : 1);
+  sol.position.copy(e.solP).normalize().multiplyScalar(30); sol.color.set(e.solCor); sol.intensity = 2.6 * e.luz;
+  hemi.intensity = 1.15 * (0.6 + 0.4 * e.luz);
+  const mapa = e.marte ? texMarte : texAreia;
+  if (matChao.map !== mapa) { matChao.map = mapa; matChao.needsUpdate = true; }
+  mar.visible = !e.marte; espuma.visible = !e.marte; rochas.visible = e.marte; guardaSol.visible = !e.marte; toalha.visible = !e.marte; nuvens.visible = !e.marte;
+  ondas(t);
+
+  // moléculas: aparecem no capítulo NO AR, flutuando
+  const f04 = J('f04'), f06 = J('f06');
+  const aMol = clamp(seg(t, f04.ini - 0.2, f04.ini + 0.6) * (1 - seg(t, f06.fim - 0.3, f06.fim)));
+  nuvemMol.visible = aMol > 0.01;
+  for (const m of moleculas) {
+    const u = m.userData;
+    m.position.copy(u.base).add(new THREE.Vector3(Math.sin(t * 0.7 + u.fase) * 0.05, Math.cos(t * 0.6 + u.fase) * 0.05, 0));
+    m.quaternion.setFromAxisAngle(u.gira, t * 0.8 + u.fase);
+    m.scale.setScalar(0.001 + aMol);
+  }
+  // fótons na fala f05 (os vermelhos seguem retos; os azuis quicam)
+  const f05 = J('f05');
+  for (const p of fotons) {
+    const u = p.userData; const tl = t - f05.ini - u.atraso * 0.6;
+    p.visible = t >= f05.ini && t < f06.fim && tl > 0;
+    if (!p.visible) continue;
+    const vel = 1.6;
+    const dir = (!u.azul || tl < u.tq) ? dirSol : u.quique;
+    if (!u.azul || tl < u.tq) p.position.copy(u.origem).addScaledVector(dirSol, vel * tl);
+    else p.position.copy(u.origem).addScaledVector(dirSol, vel * u.tq).addScaledVector(u.quique, vel * 1.1 * (tl - u.tq));
+    p.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), dir);
+  }
+  // faíscas azuis no céu (f06)
+  faiscas.material.opacity = 0.9 * clamp(seg(t, f06.ini, f06.ini + 1.2) * (1 - seg(t, f06.fim, f06.fim + 0.6)));
+  faiscas.visible = faiscas.material.opacity > 0.01;
+
+  cam.aplicar(t, palco);
+  halo.userData.virar(palco.camera);
+  // foco: nas moléculas no capítulo NO AR (a câmera já foca o alvo do plano nos outros)
+  if (t >= f04.ini && t < f06.ini) palco.foco(Math.max(0.3, palco.camera.position.distanceTo(nuvemMol.position) - 0.7), 70, 16);
+  pessoa.pose(poses(t)).vida(t, 1);
+  if (t >= J('f02').ini && t < J('f03').fim) pessoa.olhar(e.solP, 0.6);
+  rotulos.atualizar(t);
+  palco.renderizar();
+}
+
+window.addEventListener('hf-seek', (ev) => render(ev.detail.time));
+render(0);
+window.__timelines['mundo'] = gsap.timeline({ paused: true });
+</script>
+</template>

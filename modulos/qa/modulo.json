@@ -1,0 +1,7 @@
+{
+  "id": "qa",
+  "nome": "Checagem e QA do loop",
+  "estagios": ["checagem", "qa"],
+  "descricao": "Antes do render: hyperframes check + quadros por fala + emenda (o Claude revisa). Depois: duração, áudio, SSIM último×primeiro quadro, loudness e clipe de teste do loop.",
+  "saidas": ["quadros/check.json", "quadros/folha.jpg", "quadros/emenda.jpg", "qa.json", "out/emenda.jpg", "out/teste-loop.mp4"]
+}

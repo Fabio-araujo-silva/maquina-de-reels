@@ -1,0 +1,20 @@
+{
+  "id": "trilha",
+  "nome": "Trilha e efeitos",
+  "estagios": ["trilha"],
+  "descricao": "Monta a linha do tempo (linha.json), gera a música com a duração exata do vídeo em loop sem emenda e posiciona os efeitos sonoros nos eventos do roteiro.",
+  "entradas": ["roteiro.json", "voz/falas.json", "voz/palavras.json", "config.musica", "config.sfx", "config.tom", "config.estilo"],
+  "saidas": ["linha.json", "trilha/musica_loop.wav", "trilha/sfx_eventos.json", "trilha/meta.json"],
+  "provedores_musica": {
+    "elevenlabs": "POST /v1/music (instrumental) → loop.py acha o melhor ponto de laço e reamostra para a duração exata.",
+    "lemo-pluck": "compor_lemo.py: kalimba, harpa, baixo pizzicato e shaker sintetizados pelo lemo-opuscar; andamento ajustado para caber um número inteiro de compassos (loop perfeito).",
+    "arquivo": "Sua faixa (config.musica_arquivo ou caminho digitado no menu) → loop.py.",
+    "sem": "Sem música."
+  },
+  "provedores_sfx": {
+    "elevenlabs": "POST /v1/sound-generation, gerado uma vez e guardado em biblioteca/sfx/elevenlabs/.",
+    "lemo-foley": "foley_lemo.py com o sfx.py do lemo-opuscar, guardado em biblioteca/sfx/lemo/."
+  },
+  "eventos": "Definidos em motor/lib/linha.mjs: whoosh na troca de capítulo, pop em número/manchete, nega em cada item negado, tick em itens de lista, impacto no CTA, papel nas colagens, e o campo sfx de cada fala.",
+  "como_trocar": "Novo provedor de música: produza um WAV e passe por loop.py. Novo kit de efeitos: crie biblioteca/sfx/<nome>/<tipo>_<n>.wav e aponte config.sfx para ele em garantirKit()."
+}

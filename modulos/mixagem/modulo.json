@@ -1,0 +1,25 @@
+{
+  "id": "mixagem",
+  "nome": "Mixagem",
+  "estagios": [
+    "mixagem"
+  ],
+  "descricao": "Voz (−18 dBFS ativo), música (−29 dBFS com ducking de 6 dB sob a voz) e efeitos, somados de forma circular (caudas que passam do fim voltam no começo). Depois loudnorm em 2 passes para −14 LUFS / −1,5 dBTP e duração exata do vídeo.",
+  "entradas": [
+    "voz/narracao.wav",
+    "trilha/musica_loop.wav",
+    "trilha/sfx_eventos.json",
+    "linha.json"
+  ],
+  "saidas": [
+    "mix/mix.wav",
+    "mix/previa.mp3",
+    "mix/meta.json"
+  ],
+  "ajustes_por_video": {
+    "musica_rel": "música sem fala, em LU relativa à voz (padrão −4,5; mais perto de 0 = mais presente)",
+    "musica_abaixa": "quanto a música abaixa enquanto há fala, com segura entre frases (padrão 3,5 dB)",
+    "musica_bolsao": "corte na faixa da voz (2,5 kHz) dentro da música (padrão 3 dB)",
+    "lufs": "loudness final (padrão −14)"
+  }
+}

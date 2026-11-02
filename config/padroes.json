@@ -1,0 +1,54 @@
+{
+  "obs": "Seus padrões. Cada pergunta do menu mostra o valor daqui como primeira opção. Edite pelo painel (Configurações) ou à mão.",
+  "marca_nome": "ESTÚDIO",
+  "marca_cores": {
+    "primaria": "#ff7a1a",
+    "secundaria": "#22c55e",
+    "fundo": "#1d2127",
+    "texto": "#ffffff"
+  },
+  "respostas": {
+    "duracao": "60-90",
+    "arquetipo": "mito-mecanismo",
+    "tom": "didatico-confiante",
+    "loop": "ponte-total",
+    "estilo": "dinamico",
+    "paleta": "clara-neutra",
+    "legenda": "karaoke-caixa",
+    "broll": "abstratas",
+    "voz": "elevenlabs:lWq4KDY8znfkV0DrK8Vb",
+    "modelo_voz": "eleven_multilingual_v2",
+    "musica": "elevenlabs",
+    "sfx": "elevenlabs",
+    "marca": "__salvo__",
+    "cta": "compartilhar",
+    "qualidade": "1080p30",
+    "previa": "nao",
+    "revisor": "corrigir"
+  },
+  "voz_ajustes": {
+    "stability": 0.45,
+    "similarity_boost": 0.8,
+    "style": 0.15,
+    "use_speaker_boost": true,
+    "speed": 1.06
+  },
+  "palavras_por_segundo": 2.75,
+  "lead_in_s": 0.25,
+  "cauda_s": 0.45,
+  "ajustes": {
+    "obs": "Ajustes finos copiados para cada vídeo novo (editáveis no painel → Configurações).",
+    "voz_verificar": true,
+    "whisper_modelo": "small",
+    "musica_rel": -4.5,
+    "musica_abaixa": 3.5,
+    "musica_bolsao": 3,
+    "lufs": -14,
+    "musica_modelo": "music_v1",
+    "musica_prompt": "",
+    "legenda_y": 1400,
+    "qualidade_render": "looks",
+    "workers": "auto",
+    "revisor_rodadas": 2
+  }
+}

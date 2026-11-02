@@ -1,0 +1,10 @@
+{
+  "id": "montagem",
+  "nome": "Storyboard e montagem",
+  "estagios": ["storyboard", "montagem"],
+  "descricao": "Storyboard (Claude) e projeto HyperFrames: overlays, legendas e colagens gerados; mundo escrito pelo Claude a partir de um modelo por estilo.",
+  "entradas": ["roteiro.json", "linha.json", "storyboard.json", "mix/mix.wav", "config (estilo, paleta, legenda, marca)"],
+  "saidas": ["projeto/index.html", "projeto/compositions/*.html", "projeto/assets/(dados.js, kit, lib, lemo, mix.wav)"],
+  "docs": ["STORYBOARD.md", "MODULO.md", "exemplos/ceu-azul-mundo.html"],
+  "modelos": { "diorama-3d": "modelos/mundo-diorama.html", "colagem-halftone": "modelos/mundo-colagem.html", "lemo:*": "modelos/mundo-lemo.html" }
+}

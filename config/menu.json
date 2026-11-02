@@ -1,0 +1,500 @@
+{
+  "versao": 1,
+  "obs": "Menu de montagem: TODAS estas perguntas são feitas a cada vídeo novo (lotes de até 4, como o AskUserQuestion exige). O padrão de cada uma vem de config/padroes.json (editável no painel) e aparece como primeira opção. Para adicionar uma escolha nova, acrescente um objeto aqui; o módulo que a usa lê config[id] do vídeo.",
+  "lotes": [
+    {
+      "id": "narrativa",
+      "titulo": "Narrativa"
+    },
+    {
+      "id": "visual",
+      "titulo": "Visual"
+    },
+    {
+      "id": "audio",
+      "titulo": "Áudio"
+    },
+    {
+      "id": "entrega",
+      "titulo": "Marca e entrega"
+    },
+    {
+      "id": "revisao",
+      "titulo": "Revisão"
+    }
+  ],
+  "perguntas": [
+    {
+      "id": "duracao",
+      "lote": "narrativa",
+      "cabecalho": "Duração",
+      "modulo": "roteiro",
+      "pergunta": "Qual a duração alvo do vídeo?",
+      "padrao": "60-90",
+      "opcoes": [
+        {
+          "valor": "60-90",
+          "rotulo": "60 a 90 s",
+          "descricao": "Profundidade do vídeo de referência (KnowLab, 87 s). Cabe gancho, 3–4 mecanismos e comparação."
+        },
+        {
+          "valor": "45-60",
+          "rotulo": "45 a 60 s",
+          "descricao": "Curto e denso: gancho, 2–3 mecanismos e fecho. Retenção mais alta."
+        },
+        {
+          "valor": "30-45",
+          "rotulo": "30 a 45 s",
+          "descricao": "Pílula: uma ideia, um número, um mecanismo."
+        },
+        {
+          "valor": "90-120",
+          "rotulo": "90 a 120 s",
+          "descricao": "Longo: mais capítulos e comparações. Exige um gancho muito forte."
+        }
+      ]
+    },
+    {
+      "id": "arquetipo",
+      "lote": "narrativa",
+      "cabecalho": "Estrutura",
+      "modulo": "roteiro",
+      "pergunta": "Qual estrutura de roteiro?",
+      "padrao": "mito-mecanismo",
+      "opcoes": [
+        {
+          "valor": "mito-mecanismo",
+          "rotulo": "Mito × mecanismo",
+          "descricao": "A do KnowLab: gancho com número absurdo → 'sabe por quê?' → escada de mecanismos → comparação → objeção → volta à cena inicial."
+        },
+        {
+          "valor": "por-dentro",
+          "rotulo": "Por dentro",
+          "descricao": "Tour por dentro de um objeto, peça por peça, até o detalhe que ninguém vê."
+        },
+        {
+          "valor": "escala",
+          "rotulo": "Escala absurda",
+          "descricao": "Números que crescem a cada fala, comparações concretas, revelação de escala."
+        },
+        {
+          "valor": "virada",
+          "rotulo": "Virada",
+          "descricao": "História com uma crença comum que vira do avesso no meio do vídeo."
+        }
+      ]
+    },
+    {
+      "id": "tom",
+      "lote": "narrativa",
+      "cabecalho": "Tom",
+      "modulo": "roteiro",
+      "pergunta": "Qual o tom da narração?",
+      "padrao": "didatico-confiante",
+      "opcoes": [
+        {
+          "valor": "didatico-confiante",
+          "rotulo": "Didático e confiante",
+          "descricao": "Frases curtas e afirmativas, ritmo firme (referência KnowLab)."
+        },
+        {
+          "valor": "curioso-espantado",
+          "rotulo": "Curioso, espantado",
+          "descricao": "Narrador que se surpreende junto: 'e olha só isso'."
+        },
+        {
+          "valor": "urgente-polemico",
+          "rotulo": "Urgente, polêmico",
+          "descricao": "Abre com um choque e sustenta tensão. Cuidado com exagero."
+        },
+        {
+          "valor": "humor-seco",
+          "rotulo": "Humor seco",
+          "descricao": "Ironia leve, comparações absurdas, sem perder o rigor."
+        }
+      ]
+    },
+    {
+      "id": "loop",
+      "lote": "narrativa",
+      "cabecalho": "Loop",
+      "modulo": "roteiro",
+      "pergunta": "Como o fim do vídeo emenda no começo?",
+      "padrao": "ponte-total",
+      "opcoes": [
+        {
+          "valor": "ponte-total",
+          "rotulo": "Ponte total",
+          "descricao": "Recomendado: a última frase termina na primeira, a câmera volta ao plano de abertura e a trilha emenda sem corte."
+        },
+        {
+          "valor": "frase-ponte",
+          "rotulo": "Só a frase",
+          "descricao": "A última fala fica 'aberta' e a primeira fala a completa. Imagem livre."
+        },
+        {
+          "valor": "eco-visual",
+          "rotulo": "Só a imagem",
+          "descricao": "O último plano é o primeiro plano. Texto termina normal."
+        },
+        {
+          "valor": "pergunta-eco",
+          "rotulo": "Pergunta-eco",
+          "descricao": "O fim repete a pergunta do gancho e o vídeo recomeça respondendo."
+        }
+      ]
+    },
+    {
+      "id": "estilo",
+      "lote": "visual",
+      "cabecalho": "Estilo",
+      "modulo": "montagem",
+      "pergunta": "Qual estilo visual? 'Dinâmico' deixa o Claude escolher o estilo de cada cena e misturar até 3. (Em 'Other' dá para forçar qualquer estilo do catálogo, ex.: lemo:watercolor)",
+      "padrao": "dinamico",
+      "opcoes": [
+        {
+          "valor": "dinamico",
+          "rotulo": "Dinâmico (o Claude escolhe)",
+          "descricao": "O Claude escolhe o estilo de cada trecho pelo conteúdo e pode misturar até 3: diorama 3D, colagem e estilos do lemo-opuscar."
+        },
+        {
+          "valor": "diorama-3d",
+          "rotulo": "Diorama 3D",
+          "descricao": "3D claro com bonecos sem rosto, objetos de primitivas, desfoque de profundidade (o do vídeo de referência)."
+        },
+        {
+          "valor": "colagem-halftone",
+          "rotulo": "Colagem halftone",
+          "descricao": "Estilo gbro: papel recortado em meio-tom, cores chapadas, montagem stop-motion."
+        },
+        {
+          "valor": "lemo:tilt-shift",
+          "rotulo": "Miniatura tilt-shift",
+          "descricao": "lemo-opuscar: mundo visto do alto como maquete, faixa de foco."
+        }
+      ]
+    },
+    {
+      "id": "paleta",
+      "lote": "visual",
+      "cabecalho": "Paleta",
+      "modulo": "montagem",
+      "pergunta": "Qual paleta de cores?",
+      "padrao": "clara-neutra",
+      "opcoes": [
+        {
+          "valor": "clara-neutra",
+          "rotulo": "Clara e neutra",
+          "descricao": "Céu azul-claro, piso terrazzo, madeira, acentos laranja/verde (referência)."
+        },
+        {
+          "valor": "escura-tech",
+          "rotulo": "Escura tech",
+          "descricao": "Grafite, luz de recorte, acentos ciano e laranja."
+        },
+        {
+          "valor": "pop-vibrante",
+          "rotulo": "Pop vibrante",
+          "descricao": "Cores saturadas, contraste alto, cara de feed."
+        },
+        {
+          "valor": "marca",
+          "rotulo": "Cores da marca",
+          "descricao": "Usa as cores salvas em 'Marca' no painel."
+        }
+      ]
+    },
+    {
+      "id": "legenda",
+      "lote": "visual",
+      "cabecalho": "Legenda",
+      "modulo": "montagem",
+      "pergunta": "Qual estilo de legenda?",
+      "padrao": "karaoke-caixa",
+      "opcoes": [
+        {
+          "valor": "karaoke-caixa",
+          "rotulo": "Karaokê em caixa",
+          "descricao": "Caixa escura arredondada, cada palavra acende de cinza para branco na hora em que é dita (referência)."
+        },
+        {
+          "valor": "palavra-pilula",
+          "rotulo": "Palavra em pílula",
+          "descricao": "A palavra falada ganha uma pílula colorida; as outras ficam brancas com sombra."
+        },
+        {
+          "valor": "grande-central",
+          "rotulo": "Grande e central",
+          "descricao": "2–3 palavras enormes no centro, ritmo rápido."
+        },
+        {
+          "valor": "sem",
+          "rotulo": "Sem legenda",
+          "descricao": "Só overlays; não recomendado (muita gente assiste sem som)."
+        }
+      ]
+    },
+    {
+      "id": "broll",
+      "lote": "visual",
+      "cabecalho": "Colagem",
+      "modulo": "colagem",
+      "pergunta": "Usar inserts de colagem gbro (B-roll) no meio do vídeo?",
+      "padrao": "abstratas",
+      "opcoes": [
+        {
+          "valor": "abstratas",
+          "rotulo": "Nas frases abstratas",
+          "descricao": "1 a 3 inserts de colagem onde a ideia não tem objeto físico para mostrar."
+        },
+        {
+          "valor": "nunca",
+          "rotulo": "Nunca",
+          "descricao": "Vídeo inteiro no estilo principal."
+        },
+        {
+          "valor": "alternado",
+          "rotulo": "Alternado",
+          "descricao": "Alterna estilo principal e colagem a cada capítulo."
+        },
+        {
+          "valor": "gemini",
+          "rotulo": "Gemini (gbro original)",
+          "descricao": "Colagens geradas pelo Gemini Omni como no gbro original. Exige GEMINI_API_KEY e custa por clipe."
+        }
+      ]
+    },
+    {
+      "id": "voz",
+      "lote": "audio",
+      "cabecalho": "Voz",
+      "modulo": "voz",
+      "dinamica": "vozes",
+      "pergunta": "Qual voz narra? (em 'Other' cole um voice_id da ElevenLabs)",
+      "padrao": "elevenlabs:auto-masculina",
+      "opcoes": [
+        {
+          "valor": "elevenlabs:auto-masculina",
+          "rotulo": "ElevenLabs masculina",
+          "descricao": "Melhor voz masculina pt-BR da sua conta/biblioteca (escolhida em 'rs vozes')."
+        },
+        {
+          "valor": "elevenlabs:auto-feminina",
+          "rotulo": "ElevenLabs feminina",
+          "descricao": "Melhor voz feminina pt-BR da sua conta/biblioteca."
+        },
+        {
+          "valor": "kokoro:pm_alex",
+          "rotulo": "Kokoro masculina (offline)",
+          "descricao": "Grátis e local. Qualidade menor; bom para rascunho."
+        },
+        {
+          "valor": "kokoro:pf_dora",
+          "rotulo": "Kokoro feminina (offline)",
+          "descricao": "Grátis e local. Qualidade menor; bom para rascunho."
+        }
+      ]
+    },
+    {
+      "id": "modelo_voz",
+      "lote": "audio",
+      "cabecalho": "Modelo voz",
+      "modulo": "voz",
+      "pergunta": "Qual modelo de voz da ElevenLabs?",
+      "padrao": "eleven_multilingual_v2",
+      "opcoes": [
+        {
+          "valor": "eleven_multilingual_v2",
+          "rotulo": "Multilingual v2",
+          "descricao": "Estável em pt-BR e com tempos por caractere precisos."
+        },
+        {
+          "valor": "eleven_v3",
+          "rotulo": "Eleven v3",
+          "descricao": "Mais expressivo; aceita tags de emoção como [animado]."
+        },
+        {
+          "valor": "eleven_flash_v2_5",
+          "rotulo": "Flash v2.5",
+          "descricao": "Mais rápido e barato, um pouco menos natural."
+        }
+      ]
+    },
+    {
+      "id": "musica",
+      "lote": "audio",
+      "cabecalho": "Música",
+      "modulo": "trilha",
+      "pergunta": "Qual trilha musical?",
+      "padrao": "elevenlabs",
+      "opcoes": [
+        {
+          "valor": "elevenlabs",
+          "rotulo": "ElevenLabs Music",
+          "descricao": "Trilha original gerada para o vídeo, cortada em loop sem emenda."
+        },
+        {
+          "valor": "lemo-pluck",
+          "rotulo": "lemo (offline)",
+          "descricao": "Pulso minimalista de kalimba/caixinha sintetizado pelo lemo-opuscar. Grátis."
+        },
+        {
+          "valor": "arquivo",
+          "rotulo": "Minha faixa",
+          "descricao": "Use 'Other' e cole o caminho de um arquivo de áudio."
+        },
+        {
+          "valor": "sem",
+          "rotulo": "Sem música",
+          "descricao": "Só voz e efeitos."
+        }
+      ]
+    },
+    {
+      "id": "sfx",
+      "lote": "audio",
+      "cabecalho": "Efeitos",
+      "modulo": "trilha",
+      "pergunta": "Quais efeitos sonoros?",
+      "padrao": "elevenlabs",
+      "opcoes": [
+        {
+          "valor": "elevenlabs",
+          "rotulo": "ElevenLabs SFX",
+          "descricao": "Gerados uma vez e guardados na biblioteca para todos os vídeos."
+        },
+        {
+          "valor": "lemo-foley",
+          "rotulo": "lemo (offline)",
+          "descricao": "Foley sintetizado pelo lemo-opuscar: whoosh, pop, clique, batida."
+        },
+        {
+          "valor": "sem",
+          "rotulo": "Sem efeitos",
+          "descricao": "Só voz e música."
+        }
+      ]
+    },
+    {
+      "id": "marca",
+      "lote": "entrega",
+      "cabecalho": "Marca",
+      "modulo": "montagem",
+      "dinamica": "marca",
+      "pergunta": "Qual nome vai no selo do topo (ex.: 'KNOWLAB · TEMA')? Em 'Other', digite outro nome.",
+      "padrao": "__salvo__",
+      "opcoes": [
+        {
+          "valor": "__salvo__",
+          "rotulo": "Nome salvo",
+          "descricao": "Usa o nome salvo em config/padroes.json (marca_nome)."
+        },
+        {
+          "valor": "__sem__",
+          "rotulo": "Sem selo",
+          "descricao": "Topo limpo, só a pílula de capítulo."
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "lote": "entrega",
+      "cabecalho": "CTA",
+      "modulo": "roteiro",
+      "pergunta": "Qual chamada para ação antes da emenda do loop?",
+      "padrao": "compartilhar",
+      "opcoes": [
+        {
+          "valor": "compartilhar",
+          "rotulo": "Compartilhar",
+          "descricao": "'Manda pra quem ainda…' (a da referência; gera envios)."
+        },
+        {
+          "valor": "salvar",
+          "rotulo": "Salvar",
+          "descricao": "'Salva pra mostrar quando alguém…'."
+        },
+        {
+          "valor": "seguir",
+          "rotulo": "Seguir",
+          "descricao": "'Segue que a parte 2 explica…'."
+        },
+        {
+          "valor": "sem",
+          "rotulo": "Sem CTA",
+          "descricao": "Só o loop; o fim emenda direto no começo."
+        }
+      ]
+    },
+    {
+      "id": "qualidade",
+      "lote": "entrega",
+      "cabecalho": "Qualidade",
+      "modulo": "render",
+      "pergunta": "Qual qualidade de render?",
+      "padrao": "1080p30",
+      "opcoes": [
+        {
+          "valor": "1080p30",
+          "rotulo": "1080×1920, 30 fps",
+          "descricao": "Padrão do Reels/TikTok."
+        },
+        {
+          "valor": "1080p60",
+          "rotulo": "1080×1920, 60 fps",
+          "descricao": "Movimento mais liso; render cerca de 2× mais lento."
+        },
+        {
+          "valor": "rascunho",
+          "rotulo": "Rascunho 540p",
+          "descricao": "540×960 rápido, para testar ideias."
+        }
+      ]
+    },
+    {
+      "id": "previa",
+      "lote": "revisao",
+      "cabecalho": "Prévia",
+      "modulo": "render",
+      "pergunta": "Depois do roteiro aprovado, quer ver uma prévia antes do render final?",
+      "padrao": "nao",
+      "opcoes": [
+        {
+          "valor": "nao",
+          "rotulo": "Não, vai direto",
+          "descricao": "100% autônomo depois da aprovação do roteiro."
+        },
+        {
+          "valor": "sim",
+          "rotulo": "Sim, parar na prévia",
+          "descricao": "Para após a checagem e mostra quadros e a prévia antes de renderizar."
+        }
+      ]
+    },
+    {
+      "id": "revisor",
+      "lote": "revisao",
+      "cabecalho": "Revisor",
+      "modulo": "revisor",
+      "pergunta": "Pôr um agente revisor no fim do vídeo?",
+      "padrao": "corrigir",
+      "opcoes": [
+        {
+          "valor": "corrigir",
+          "rotulo": "Revisar e corrigir",
+          "descricao": "Um agente independente assiste ao vídeo pronto e aponta problemas; o Claude corrige e renderiza de novo (até 2 rodadas, ~15 a 25 min cada). Texto aprovado nunca muda sem você."
+        },
+        {
+          "valor": "relatorio",
+          "rotulo": "Só relatório",
+          "descricao": "O agente revisa e escreve um parecer; você lê no painel e decide o que pedir."
+        },
+        {
+          "valor": "nao",
+          "rotulo": "Sem revisor",
+          "descricao": "Entrega logo depois do QA automático."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "fonte",
+  "nome": "Fonte externa (YouTube)",
+  "estagios": ["briefing"],
+  "descricao": "O usuário cola o link de um vídeo do YouTube e o reel é feito sobre o assunto dele. O yt-dlp baixa só os metadados, a capa e a legenda (nunca o vídeo). Sem legenda, 'rs fonte <id> --transcrever' baixa só o áudio dos primeiros 20 min e transcreve com o faster-whisper. O roteiro usa a transcrição como ponto de partida, confere os fatos em fontes independentes e cita o vídeo.",
+  "entradas": ["link do YouTube (rs novo --youtube, painel → Novo vídeo, ou rs fonte <id> <link>)"],
+  "saidas": ["fonte/youtube.json", "fonte/transcricao.txt", "fonte/capa.jpg", "fonte/resumo.md", "estado.json → fonte"],
+  "dependencias": ["yt-dlp no PATH (o mesmo da skill tiktok-download) ou python -m yt_dlp", "faster-whisper na .venv (só para vídeos sem legenda)"],
+  "regra": "Nunca usar áudio, imagens ou trechos do vídeo original no reel; o texto é próprio e os fatos são conferidos fora do vídeo."
+}

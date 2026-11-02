@@ -1,0 +1,11 @@
+{
+  "id": "revisor",
+  "nome": "Revisão do agente",
+  "estagios": ["revisao_final"],
+  "descricao": "Depois do render e do QA, um agente revisor independente (subagente do Claude, contexto limpo) assiste ao vídeo pronto e grava um parecer com problemas, gravidade, onde e como corrigir. No modo 'corrigir' o Claude produtor aplica as correções e o motor repete a revisão (até revisor_rodadas). No modo 'relatorio' o usuário decide pelo painel.",
+  "entradas": ["out/render.mp4", "out/emenda.jpg", "out/teste-loop.mp4", "roteiro.json", "linha.json", "storyboard.json", "qa.json", "quadros/check.json", "mix/mix.wav"],
+  "saidas": ["revisor/rodada-N/pacote.md", "revisor/rodada-N/quadros/*.jpg", "revisor/rodada-N/folha.jpg", "revisor/rodada-N/transcricao.json", "revisor/rodada-N.json (parecer)"],
+  "config": { "revisor": "corrigir | relatorio | nao (menu)", "revisor_rodadas": "máximo de rodadas (padrão 2)" },
+  "docs": ["MODULO.md (produtor)", "REVISOR.md (briefing do agente revisor)"],
+  "regra": "Texto de narração aprovado nunca muda sem o usuário: vira sugestão no painel."
+}

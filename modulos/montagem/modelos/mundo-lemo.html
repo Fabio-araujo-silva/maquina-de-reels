@@ -1,0 +1,34 @@
+<template>
+<style>
+  #root { position: absolute; inset: 0; overflow: hidden; }
+  #__MUNDO__-tela { position: absolute; inset: 0; width: 100%; height: 100%; }
+</style>
+<div id="root" data-composition-id="__MUNDO__" data-width="1080" data-height="1920">
+  <canvas id="__MUNDO__-tela" width="1080" height="1920"></canvas>
+</div>
+<script type="module">
+// ESBOCO_MUNDO — estilo lemo-opuscar "__ESTILO__". Antes de escrever, leia:
+//   externos/lemo-opuscar/styles/__ESTILO__/STYLE.md   (materiais, cor, câmera, movimentos nativos, armadilhas)
+//   externos/lemo-opuscar/DIRECTOR.md                   (direção) e TECHNIQUE.md §2 (imagem = função do tempo)
+// Bibliotecas disponíveis aqui: three (+ addons), kit/* (palco, formas, personagem, câmera, rótulos, colagem, núcleo)
+// e lemo/* (lib.js com easings e ruído; post.js com DOF físico, GTAO, bloom e vinheta).
+// Contrato: desenhe TUDO a partir de t em render(t); sem estado entre quadros; o fim (t = R.total) volta ao começo.
+import * as THREE from 'three';
+import { mulberry, lerp, clamp, seg, eio, eo, back, spring } from 'lemo/lib.js';
+import { janela, fala, falaEm, capituloEm, ligarMundo } from 'kit/nucleo.js';
+
+const R = window.REEL; const P = R.paleta; const TOTAL = R.total;
+const tela = document.getElementById('__MUNDO__-tela');
+const g = tela.getContext('2d');
+
+// Esboço mínimo (substitua): fundo no tom do estilo e o rótulo do capítulo.
+function render(t) {
+  g.fillStyle = P.ceu?.[1] || '#f2efe8'; g.fillRect(0, 0, 1080, 1920);
+  g.fillStyle = '#222'; g.font = '800 64px Inter, Arial'; g.textAlign = 'center';
+  g.fillText(String(capituloEm(t)?.rotulo || ''), 540, 980);
+}
+// Não mude esta linha: num vídeo híbrido ela mostra este mundo só nas janelas dele (REEL.mundos) e pula o resto.
+ligarMundo('__MUNDO__', tela, render);
+window.__timelines['__MUNDO__'] = gsap.timeline({ paused: true });
+</script>
+</template>

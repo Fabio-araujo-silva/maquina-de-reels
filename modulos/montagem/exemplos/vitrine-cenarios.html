@@ -1,0 +1,81 @@
+<template>
+<style>
+  #root { position: absolute; inset: 0; overflow: hidden; }
+  #mundo-tela { position: absolute; inset: 0; width: 100%; height: 100%; }
+</style>
+<div id="root" data-composition-id="mundo" data-width="1080" data-height="1920">
+  <canvas id="mundo-tela" width="1080" height="1920"></canvas>
+</div>
+<script type="module">
+// EXEMPLO DE USO do kit/cenarios.js: a vitrine que gerou kit-cenarios.jpg (dados FICTÍCIOS, só para mostrar as peças).
+// Cada peça é posicionada longe das outras e a câmera visita cada enquadramento por 2 s com enquadrar(peça, nome).
+// Num vídeo de verdade: use os nomes, números e textos REAIS do roteiro e das fontes.
+import * as THREE from 'three';
+import { criarPalco, criarPiso, texturaGradiente } from 'kit/palco.js';
+import { mesa } from 'kit/formas.js';
+import { criarPersonagem } from 'kit/personagem.js';
+import { planos } from 'kit/camera.js';
+import { predio, cidade, urnaEletronica, placar, grafico3d, celular, jornal, multidao, estudioCriador, palanque, plenario, enquadrar } from 'kit/cenarios.js';
+
+const P = window.REEL.paleta;
+const tela = document.getElementById('mundo-tela');
+const palco = criarPalco({ canvas: tela, paleta: P });
+const { scene } = palco;
+scene.background = texturaGradiente(['#cfe3f3', '#eef4f8', '#f6f3ee']);
+criarPiso(palco, { tamanho: 1600, repetir: 340 });
+const add = (o, x, z = 0, y = 0, ry = 0) => { o.position.set(x, y, z); o.rotation.y = ry; scene.add(o); return o; };
+
+const congresso = add(predio('congresso'), 0, 0);
+add(mesa({ largura: 1.0, profundidade: 0.6 }), 60, 0);
+const urna = add(urnaEletronica({ cargo: 'Deputado Federal', numero: '5050', nome: 'Caio Lima', partido: 'PNV' }), 60, 0, 0.75);
+const pl = add(placar({ titulo: 'Deputado federal · simulação', linhas: [{ nome: 'Caio Lima (PNV)', valor: 249077, cor: '#f5c518' }, { nome: 'Candidata B (PXR)', valor: 201544, cor: '#e5484d' }, { nome: 'Candidato C (PDM)', valor: 187320, cor: '#3b82f6' }] }), 100, 0);
+const gr = add(grafico3d({ valores: [33931, 249077], rotulos: ['2022', '2026'], formatar: (v) => `${v.toLocaleString('pt-BR')} votos` }), 140, 0);
+const cel = add(celular({ app: 'youtube', escala: 1, dados: { nome: 'Caio Lima', usuario: 'caioexplica', inscritos: '512 mil', videos: 1240, titulos: ['Como funciona uma eleição proporcional', 'A história do voto no Brasil em 10 minutos', 'Respondendo perguntas sobre a urna'] } }), 180, 0);
+const estudio = add(estudioCriador({ canal: 'Caio Explica', inscritos: 512000 }), 220, 0);
+const p5 = criarPersonagem({ pele: '#5c3a26', cabelo: 'black', corCabelo: '#0f0f10', barba: 'cheia', oculos: true, roupa: '#c0392b', semente: 3 });
+add(p5.pose('sentado').grupo, 220, -0.15);
+const palq = add(palanque({ faixa: 'Sua cidade merece mais', cores: ['#d6332b', '#ffffff'] }), 260, 0);
+const p6 = criarPersonagem({ pele: '#e2b48a', cabelo: 'lateral', corCabelo: '#8a8a8a', paleto: '#2b2f3a', gravata: '#b91c1c', barba: 'bigode', semente: 4 });
+add(p6.pose('acenando').grupo, 260, 0.05, 0.45);
+const multi = add(multidao({ n: 18, largura: 5, profundidade: 2.4, olharPara: [0, 1.5, -6] }), 260, 6);
+const plen = add(plenario({ fileiras: 4, porFileira: 12 }), 310, 0);
+const cid = add(cidade({ quadrasX: 3, quadrasZ: 3 }), 400, 0);
+const tribunal = add(predio('classico', { nome: 'Supremo Tribunal Federal' }), 480, 0);
+const hosp = add(predio('hospital', { nome: 'Hospital das Clínicas' }), 520, 0);
+add(mesa({ largura: 1.2, profundidade: 0.8 }), 560, 0);
+const jr = add(jornal({ nome: 'DIÁRIO DA CIDADE', manchete: 'Professor de história é o deputado mais votado do estado', subtitulo: 'Caio Lima recebe 249 mil votos (exemplo fictício)', data: '5 de outubro de 2026' }), 560, -0.1, 0.75);
+const zap = add(celular({ app: 'whatsapp', dados: { nome: 'Grupo da família', mensagens: [{ de: 'outro', texto: 'Viu quem foi o mais votado?', hora: '20:14' }, { de: 'eu', texto: 'O professor do YouTube! 249 mil votos', hora: '20:15' }, { de: 'outro', texto: 'Nunca imaginei', hora: '20:15' }] } }), 600, 0);
+const tracos = [
+  { cabelo: 'careca', barba: 'cheia', pele: '#8b5a3c' }, { cabelo: 'black', oculos: 'redondo', pele: '#5c3a26', roupa: '#f2c230' },
+  { cabelo: 'lateral', corCabelo: '#8a8a8a', paleto: '#1f2a44', gravata: '#b91c1c', oculos: true, pele: '#f0c9a3' }, { cabelo: 'longo', corCabelo: '#6b4423', oculos: 'sol', roupa: '#2bb0a6', pele: '#e2b48a' },
+  { cabelo: 'raspado', barba: 'cavanhaque', pele: '#a86f48', roupa: '#7c4dc4' }, { cabelo: 'coque', corCabelo: '#23180f', paleto: '#3f3f46', pele: '#c68a5b' },
+];
+tracos.forEach((o, i) => { const p = criarPersonagem({ ...o, semente: i + 7 }); add(p.pose('em_pe').grupo, 640 + (i - 2.5) * 0.62, 0); });
+const grupoTracos = new THREE.Group(); grupoTracos.position.set(640, 0, 0); scene.add(grupoTracos);
+grupoTracos.userData.enquadramentos = { geral: { pos: [0, 1.3, 11.5], alvo: [0, 1.0, 0], fov: 34 } };
+
+const tomadas = [
+  [congresso, 'geral'], [congresso, 'torres'], [urna, 'geral'], [urna, 'tela'], [pl, 'geral'], [gr, 'geral'], [cel, 'geral'],
+  [estudio, 'geral'], [estudio, 'pessoa'], [palq, 'geral'], [multi, 'costas'], [plen, 'geral'], [cid, 'geral'], [cid, 'rua'],
+  [tribunal, 'geral'], [hosp, 'geral'], [jr, 'geral'], [zap, 'geral'], [grupoTracos, 'geral'],
+];
+const cam = planos(tomadas.map(([o, n], i) => { const e = enquadrar(o, n); return { ini: i * 2, fim: i * 2 + 2, de: e, para: e }; }));
+const alvos = tomadas.map(([o, n]) => enquadrar(o, n));
+
+function render(t) {
+  const i = Math.min(tomadas.length - 1, Math.floor(t / 2));
+  const a = alvos[i];
+  palco.sombraEm(a.alvo, Math.max(3, new THREE.Vector3(...a.pos).distanceTo(new THREE.Vector3(...a.alvo)) * 0.8));
+  urna.userData.estado({ digitos: 4 });
+  pl.userData.revelar(1);
+  gr.userData.crescer(1);
+  cam.aplicar(t, palco);
+  const dist = new THREE.Vector3(...a.pos).distanceTo(new THREE.Vector3(...a.alvo));
+  palco.focarEm(new THREE.Vector3(...a.alvo), dist < 1.2 ? 4 : 20, dist < 1.2 ? 3 : 6);
+  palco.renderizar();
+}
+window.addEventListener('hf-seek', (ev) => render(ev.detail.time));
+render(0);
+window.__timelines['mundo'] = gsap.timeline({ paused: true });
+</script>
+</template>

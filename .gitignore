@@ -1,0 +1,18 @@
+# segredos e ambiente local
+.env
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+
+# tudo que é gerado por vídeo / por máquina
+videos/
+dados/
+biblioteca/
+externos/
+config/vozes.json
+config/vozes_usuario.json
+
+# sistema
+.DS_Store
+Thumbs.db

@@ -1,0 +1,11 @@
+{
+  "id": "roteiro",
+  "nome": "Roteiro",
+  "estagios": ["roteiro"],
+  "executor": "claude",
+  "descricao": "O Claude pesquisa, escreve roteiro.json (estrutura da referência + loop cíclico) e o motor valida e publica para revisão.",
+  "entradas": ["briefing.md", "config (duracao, arquetipo, tom, loop, cta, broll, estilo)"],
+  "saidas": ["roteiro.json", "roteiro.md", "roteiro.vN.json"],
+  "docs": ["MODULO.md", "estrutura-referencia.md"],
+  "validacao": "motor/lib/roteiro.mjs (validarRoteiro)"
+}
