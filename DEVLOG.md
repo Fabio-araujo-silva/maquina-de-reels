@@ -8,3 +8,4 @@ Notas de desenvolvimento.
 - feat: presets de estilo (explicador, minimal) (04/11)
 - fix: voz tropeca em numeros por extenso (04/11)
 - feat: presets de estilo (explicador, minimal) (04/11)
+- fix: loop fecha sem frame duplicado (05/11)
