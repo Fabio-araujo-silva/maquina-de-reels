@@ -10,3 +10,4 @@ Notas de desenvolvimento.
 - feat: presets de estilo (explicador, minimal) (04/11)
 - fix: loop fecha sem frame duplicado (05/11)
 - feat: presets de estilo (explicador, minimal) (06/11)
+- feat: roteiro com fontes citadas no fim do reel (06/11)
