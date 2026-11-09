@@ -11,3 +11,4 @@ Notas de desenvolvimento.
 - fix: loop fecha sem frame duplicado (05/11)
 - feat: presets de estilo (explicador, minimal) (06/11)
 - feat: roteiro com fontes citadas no fim do reel (06/11)
+- fix: acento some na legenda em fontes 3D (09/11)
