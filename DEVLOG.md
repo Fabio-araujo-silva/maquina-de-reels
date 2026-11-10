@@ -15,3 +15,4 @@ Notas de desenvolvimento.
 - feat: b-roll de colagem entre blocos do roteiro (09/11)
 - feat: roteiro com fontes citadas no fim do reel (09/11)
 - feat: legenda karaokes sincronizada por palavra (10/11)
+- fix: loop fecha sem frame duplicado (10/11)
