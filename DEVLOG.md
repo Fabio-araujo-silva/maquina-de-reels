@@ -13,3 +13,4 @@ Notas de desenvolvimento.
 - feat: roteiro com fontes citadas no fim do reel (06/11)
 - fix: acento some na legenda em fontes 3D (09/11)
 - feat: b-roll de colagem entre blocos do roteiro (09/11)
+- feat: roteiro com fontes citadas no fim do reel (09/11)
