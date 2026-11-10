@@ -14,3 +14,4 @@ Notas de desenvolvimento.
 - fix: acento some na legenda em fontes 3D (09/11)
 - feat: b-roll de colagem entre blocos do roteiro (09/11)
 - feat: roteiro com fontes citadas no fim do reel (09/11)
+- feat: legenda karaokes sincronizada por palavra (10/11)
