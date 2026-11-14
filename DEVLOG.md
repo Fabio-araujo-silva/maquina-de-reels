@@ -20,3 +20,4 @@ Notas de desenvolvimento.
 - chore: validacao de prompt na entrada (14/11)
 - perf: render mais rapido com cache de cenas (14/11)
 - fix: voz tropeca em numeros por extenso (14/11)
+- refactor: pipeline de cenas em etapas isoladas (14/11)
