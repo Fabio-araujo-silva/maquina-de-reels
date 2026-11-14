@@ -21,3 +21,4 @@ Notas de desenvolvimento.
 - perf: render mais rapido com cache de cenas (14/11)
 - fix: voz tropeca em numeros por extenso (14/11)
 - refactor: pipeline de cenas em etapas isoladas (14/11)
+- docs: como rodar com API OpenAI-compativel (14/11)
