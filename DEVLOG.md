@@ -17,3 +17,4 @@ Notas de desenvolvimento.
 - feat: legenda karaokes sincronizada por palavra (10/11)
 - fix: loop fecha sem frame duplicado (10/11)
 - refactor: pipeline de cenas em etapas isoladas (12/11)
+- chore: validacao de prompt na entrada (14/11)
