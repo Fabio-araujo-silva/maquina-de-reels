@@ -18,3 +18,4 @@ Notas de desenvolvimento.
 - fix: loop fecha sem frame duplicado (10/11)
 - refactor: pipeline de cenas em etapas isoladas (12/11)
 - chore: validacao de prompt na entrada (14/11)
+- perf: render mais rapido com cache de cenas (14/11)
