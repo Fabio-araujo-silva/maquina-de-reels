@@ -23,3 +23,4 @@ Notas de desenvolvimento.
 - refactor: pipeline de cenas em etapas isoladas (14/11)
 - docs: como rodar com API OpenAI-compativel (14/11)
 - feat: legenda karaokes sincronizada por palavra (15/11)
+- fix: loop fecha sem frame duplicado (15/11)
